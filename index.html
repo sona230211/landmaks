@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экспедиция «Странник» | Квест на необитаемый остров</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: #0a192f; /* Темно-синий, глубокий океан */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(28, 58, 103, 0.4) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(19, 42, 68, 0.3) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header-font {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+        }
+
+        /* ===== КОНТЕЙНЕР И СЕКЦИИ ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* ===== ГЕРОЙ-СЕКЦИЯ ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            padding-top: 60px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center 30%;
+            background-attachment: fixed;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(10, 25, 47, 0.85);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 150, 200, 0.2);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 15px 35px rgba(0, 10, 30, 0.5);
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: #d4af37; /* Золотой */
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            color: #a0c8ff;
+        }
+
+        .cta-main {
+            display: inline-block;
+            background: linear-gradient(to right, #1a4a7a, #2a6ca1);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-top: 30px;
+            border: 2px solid #3a8bc8;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(42, 108, 161, 0.4);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+
+        .cta-main:hover {
+            background: linear-gradient(to right, #2a6ca1, #3a8bc8);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(42, 108, 161, 0.6);
+            border-color: #4aabe0;
+        }
+
+        /* ===== ИНТЕРАКТИВНАЯ КАРТА ===== */
+        .map-section {
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #d4af37;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: #2a6ca1;
+        }
+
+        .map-container {
+            position: relative;
+            max-width: 900px;
+            margin: 60px auto;
+            border: 15px solid #1a2d3f;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            background: #0c1b2e;
+        }
+
+        #ancientMap {
+            width: 100%;
+            height: 500px;
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            cursor: pointer;
+            transition: filter 0.5s;
+        }
+
+        .map-marker {
+            position: absolute;
+            top: 45%;
+            left: 75%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #d4af37;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 10px rgba(212, 175, 55, 0.7);
+            animation: pulse 2s infinite;
+            z-index: 2;
+        }
+
+        .map-marker:before {
+            content: 'X';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0a192f;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            transition: opacity 0.8s ease;
+        }
+
+        .map-overlay-content {
+            text-align: center;
+            padding: 30px;
+            max-width: 600px;
+        }
+
+        /* ===== СЕКЦИЯ ПРИГЛАШЕНИЯ ===== */
+        .invitation {
+            background: rgba(19, 34, 53, 0.7);
+            border-top: 1px solid rgba(100, 150, 200, 0.1);
+            border-bottom: 1px solid rgba(100, 150, 200, 0.1);
+        }
+
+        .invitation-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+
+        .quote {
+            font-style: italic;
+            color: #a0c8ff;
+            border-left: 4px solid #d4af37;
+            padding-left: 20px;
+            margin: 40px 0;
+            text-align: left;
+            font-size: 1.5rem;
+        }
+
+        /* ===== СЕКЦИЯ ИГРЫ ===== */
+        .game-section {
+            text-align: center;
+        }
+
+        .game-container {
+            background: rgba(26, 44, 63, 0.8);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 30px;
+            border: 1px solid rgba(100, 150, 200, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 10, 30, 0.5);
+        }
+
+        .game-description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #b0d0ff;
+        }
+
+        .screenshots {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .screenshot {
+            width: 280px;
+            height: 180px;
+            border-radius: 8px;
+            border: 3px solid #2a6ca1;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.05);
+        }
+
+        /* ===== ПРАВИЛА И ТАЙМЕР ===== */
+        .rules-timer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .rules, .timer-box {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(26, 44, 63, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 150, 200, 0.2);
+        }
+
+        .rules h3, .timer-box h3 {
+            color: #d4af37;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .rules ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .rules li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .rules li:before {
+            content: '⚓';
+            position: absolute;
+            left: 0;
+            color: #2a6ca1;
+        }
+
+        #countdown {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #d4af37;
+            margin: 20px 0;
+            font-family: 'Cinzel', serif;
+        }
+
+        .timer-note {
+            font-style: italic;
+            color: #a0c8ff;
+            margin-top: 15px;
+        }
+
+        /* ===== ФУТЕР ===== */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(100, 150, 200, 0.1);
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 768px) {
+            .hero-content { padding: 20px; }
+            .logo { font-size: 2.2rem; }
+            .section-title { font-size: 2rem; }
+            .cta-main { padding: 15px 30px; font-size: 1.2rem; }
+            #ancientMap { height: 350px; }
+            .screenshot { width: 100%; max-width: 280px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Герой-секция с призывом -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="logo header-font">«СТРАННИК»</h1>
+                <p class="tagline">ЭКСПЕДИЦИЯ К ГРАНИЦАМ ИЗВЕСТНОГО</p>
+                <h2 style="font-size: 2.2rem; margin-bottom: 30px; color: #fff;" class="header-font">
+                    КООРДИНАТЫ ВЕДУТ К ТОЧКЕ, КОТОРОЙ НЕТ НА КАРТАХ.
+                </h2>
+                <p style="font-size: 1.4rem; margin-bottom: 20px;">
+                    Экипаж набран. Корабль ждёт. Единственное, чего не хватает для этой экспедиции — это вас.
+                </p>
+                <p style="font-size: 1.6rem; margin-bottom: 40px; color: #d4af37;" class="header-font">
+                    Найдете то, что должно оставаться скрытым?
+                </p>
+                <!-- ОСНОВНАЯ КНОПКА ССЫЛКА НА ВАШУ ИГРУ -->
+                <a href="https://sona230211.github.io/kvestmaks/" class="cta-main" target="_blank">
+                    <i class="fas fa-anchor"></i> ПОДНЯТЬ ЯКОРЬ И ОТПРАВИТЬСЯ
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция с интерактивной картой -->
+    <section class="map-section">
+        <div class="container">
+            <h2 class="section-title header-font">ВАША КАРТА</h2>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 30px;">
+                Старая карта, доставшаяся капитану от безумного картографа. Отметьте конечную точку маршрута, чтобы раскрыть послание.
+            </p>
+            <div class="map-container">
+                <div id="ancientMap">
+                    <div class="map-overlay" id="mapOverlay">
+                        <div class="map-overlay-content">
+                            <h3 class="header-font" style="color: #d4af37; font-size: 1.8rem; margin-bottom: 20px;">НАЙДИТЕ ОСТРОВ</h3>
+                            <p>Кликните на мигающую метку в дальнем углу карты, чтобы проложить курс экспедиции «Странник».</p>
+                        </div>
+                    </div>
+                    <div class="map-marker" id="mapMarker"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция с цитатой-приглашением -->
+    <section class="invitation">
+        <div class="container">
+            <div class="invitation-content">
+                <blockquote class="quote">
+                    "Мне нужны не матросы, а искатели приключений с крепкими нервами. Мой корабль «Странник» держит курс на остров, откуда не возвращались. Жалование — доля от славы и… того, что мы найдём. Вы на борту?"
+                </blockquote>
+                <p style="margin-bottom: 30px;">
+                    — Капитан Эларион Торн, из судового журнала шхуны «Странник».
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция с описанием игры и скриншотами -->
+    <section class="game-section">
+        <div class="container">
+            <h2 class="section-title header-font">ЭКСПЕДИЦИЯ НАЧИНАЕТСЯ</h2>
+            <div class="game-container">
+                <p class="game-description">
+                    Это не просто квест. Это полное погружение в мир тайн и опасностей. Вам предстоит стать частью экипажа, исследовать остров, решать головоломки и принять судьбоносное решение при встрече с артефактом.
+                </p>
+                <!-- Скриншоты из вашего квеста -->
+                <div class="screenshots">
+                    <!-- ЗАГРУЗИТЕ СКРИНЫ И УКАЖИТЕ ПРАВИЛЬНЫЕ ИМЕНА ФАЙЛОВ -->
+                    <img src="screenshot1-deck.jpg" alt="Палуба корабля" class="screenshot">
+                    <img src="screenshot2-island.jpg" alt="Вид на остров" class="screenshot">
+                    <img src="screenshot3-artifact.jpg" alt="Загадочный артефакт" class="screenshot">
+                </div>
+                <!-- ВТОРАЯ КНОПКА ССЫЛКА НА ИГРУ -->
+                <a href="https://sona230211.github.io/kvestmaks/" class="cta-main" target="_blank" style="font-size: 1.3rem; padding: 18px 45px;">
+                    <i class="fas fa-play-circle"></i> НАЧАТЬ ЭКСПЕДИЦИЮ ПРЯМО СЕЙЧАС
+                </a>
+            </div>
+
+            <!-- Правила и таймер -->
+            <div class="rules-timer">
+                <div class="rules">
+                    <h3 class="header-font">ПРАВИЛА ВЫЖИВАНИЯ</h3>
+                    <ul>
+                        <li>Доверяйте своей команде, но проверяйте каждую находку.</li>
+                        <li>Тайна острова раскрывается только тем, кто наблюдает.</li>
+                        <li>Артефакт не терпит спешки. Анализируйте каждую деталь.</li>
+                        <li>Готовьтесь принять решение, от которого зависит больше, чем ваша жизнь.</li>
+                        <li>Время на острове течет иначе. У вас есть 60 минут.</li>
+                    </ul>
+                </div>
+                <div class="timer-box">
+                    <h3 class="header-font">ДО ОТПЛЫТИЯ</h3>
+                    <p>Следующий рейс «Странника» отправится через:</p>
+                    <div id="countdown">60:00</div>
+                    <p class="timer-note">Таймер запустится заново, когда вы начнете квест.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <p>© 2023 Экспедиция «Странник». Все тайны принадлежат тем, кто осмелится их найти.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">
+                Это посадочная страница для квеста. Контакт: capital.thorn@strannik.exp
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== ИНТЕРАКТИВНАЯ КАРТА =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const map = document.getElementById('ancientMap');
+            const marker = document.getElementById('mapMarker');
+            const overlay = document.getElementById('mapOverlay');
+            const countdownEl = document.getElementById('countdown');
+
+            // Обработчик клика по карте/маркеру
+            function handleMapClick(event) {
+                // Простая проверка: клик вблизи маркера или по нему
+                const markerRect = marker.getBoundingClientRect();
+                const mapRect = map.getBoundingClientRect();
+                
+                const clickX = event.clientX - mapRect.left;
+                const clickY = event.clientY - mapRect.top;
+                
+                const markerX = markerRect.left - mapRect.left + markerRect.width / 2;
+                const markerY = markerRect.top - mapRect.top + markerRect.height / 2;
+                
+                // Расстояние от клика до центра маркера
+                const distance = Math.sqrt((clickX - markerX) ** 2 + (clickY - markerY) ** 2);
+                
+                if (distance < 60) { // Если клик близко к маркеру
+                    // Исчезновение оверлея с сообщением
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 800);
+                    
+                    // Эффект "вспышки" на карте
+                    map.style.filter = 'brightness(1.3) sepia(0.5)';
+                    setTimeout(() => {
+                        map.style.filter = 'brightness(1)';
+                    }, 500);
+                    
+                    // Показ нового сообщения (можно заменить на более сложное)
+                    setTimeout(() => {
+                        alert('Курс проложен! Координаты 10° ю.ш. 140° з.д. записаны в судовой журнал. «Странник» готов к отплытию. Теперь ваша очередь.');
+                    }, 600);
+                    
+                    // Убираем обработчик, чтобы действие было одноразовым
+                    map.removeEventListener('click', handleMapClick);
+                    marker.style.animation = 'none';
+                    marker.style.boxShadow = '0 0 10px 5px rgba(212, 175, 55, 0.9)';
+                }
+            }
+
+            // Вешаем обработчик на всю карту
+            map.addEventListener('click', handleMapClick);
+
+            // ===== ТАЙМЕР ОБРАТНОГО ОТСЧЕТА =====
+            function startCountdown(minutes) {
+                let totalSeconds = minutes * 60;
+                const countdownInterval = setInterval(() => {
+                    const mins = Math.floor(totalSeconds / 60);
+                    const secs = totalSeconds % 60;
+                    
+                    // Форматирование: 05:09
+                    countdownEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    
+                    if (totalSeconds <= 0) {
+                        clearInterval(countdownInterval);
+                        countdownEl.textContent = "00:00";
+                        countdownEl.style.color = "#ff5555";
+                        // Можно добавить действие по окончанию таймера
+                    } else {
+                        totalSeconds--;
+                    }
+                }, 1000);
+            }
+
+            // Запуск таймера на 60 минут при загрузке
+            startCountdown(60);
+        });
+    </script>
+</body>
+</html>
